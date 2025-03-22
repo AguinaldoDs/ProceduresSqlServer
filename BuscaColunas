@@ -1,0 +1,23 @@
+	
+	
+	
+	declare @table_catalog varchar(50) = 'master'
+	declare @table_schema varchar(50) = 'dbo'
+	declare @table varchar(50) = 'tab'
+
+	--| consulta no sys
+	declare @query nvarchar(max) = 
+		'select top 1 @column_cpf_out = column_name 
+		 from ' + quotename(@table_catalog) + '.information_schema.columns
+		 where table_schema = '''+@table_schema+'''
+		 and table_name = '''+@table+'''
+		 and column_name like ''%cpf%'''
+
+
+	--| Armazena a saida
+	declare @column_cpf nvarchar(255)
+	exec sp_executesql @query, N'@column_cpf_out nvarchar(255) output', @column_cpf output
+
+	select @column_cpf
+
+
